@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom Checker</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://kit.fontawesome.com/YOUR_FONTAWESOME_KIT.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="min-h-screen flex flex-col items-center p-6 bg-white">
+
+    <div class="w-screen max-w-full p-8" x-data="symptomApp()">
+        <!-- Header -->
+        <h1 class="text-4xl font-bold text-center text-blue-700 mb-6 uppercase tracking-wide">
+            <i class="fas fa-notes-medical"></i> Symptom Checker
+        </h1>
+
+        <!-- Search Box -->
+        <div class="relative max-w-lg mx-auto">
+            <input type="text" x-model="searchQuery" placeholder="Search symptoms..." 
+                   class="w-full p-3 border-2 border-blue-500 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            <div class="absolute right-3 top-3 text-blue-500">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <!-- Dropdown Symptom List -->
+        <ul class="mt-2 border border-blue-300 rounded-lg bg-white max-h-48 overflow-y-auto max-w-lg mx-auto" 
+            x-show="filteredSymptoms.length">
+            <template x-for="symptom in filteredSymptoms" :key="symptom">
+                <li class="p-2 hover:bg-blue-100 cursor-pointer flex items-center gap-2" 
+                    @click="addSymptom(symptom)">
+                    <i class="fas fa-plus text-blue-600"></i>
+                    <span x-text="symptom"></span>
+                </li>
+            </template>
+        </ul>
+
+        <!-- Selected Symptoms -->
+        <div class="mt-6 text-center">
+            <h2 class="text-lg font-semibold text-blue-700"><i class="fas fa-list"></i> Selected Symptoms:</h2>
+            <div class="flex flex-wrap gap-2 justify-center mt-2">
+                <template x-for="(symptom, index) in selectedSymptoms" :key="index">
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                        <span x-text="symptom"></span>
+                        <button @click="removeSymptom(index)" class="text-white text-lg">&times;</button>
+                    </span>
+                </template>
+            </div>
+        </div>
+
+        <!-- Button to Check Disease -->
+        <div class="mt-6 text-center">
+            <button @click="checkDisease()" 
+                    class="bg-green-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-green-700 transition text-lg font-semibold uppercase">
+                <i class="fas fa-stethoscope"></i> Check Disease
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div x-show="disease" class="mt-8 p-6 border-2 border-blue-500 rounded-lg shadow-lg bg-white max-w-4xl mx-auto" x-cloak>
+            <h2 class="text-2xl font-bold text-red-600 text-center">
+                <i class="fas fa-exclamation-circle"></i> Diagnosis: <span x-text="disease"></span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Diet -->
+                <div class="p-4 border-2 border-blue-400 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-blue-600"><i class="fas fa-utensils"></i> Diet:</h3>
+                    <ul class="list-disc pl-5 text-sm text-blue-700" x-html="formatList(diets)"></ul>
+                </div>
+
+                <!-- Medications -->
+                <div class="p-4 border-2 border-green-500 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-green-600"><i class="fas fa-pills"></i> Medications:</h3>
+                    <ul class="list-disc pl-5 text-sm text-green-700" x-html="formatList(medications)"></ul>
+                </div>
+
+                <!-- Precautions -->
+                <div class="p-4 border-2 border-yellow-500 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-yellow-600"><i class="fas fa-exclamation-triangle"></i> Precautions:</h3>
+                    <ul class="list-disc pl-5 text-sm text-yellow-700" x-html="formatList(precautions)"></ul>
+                </div>
+
+                <!-- Workouts -->
+                <div class="p-4 border-2 border-purple-500 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-purple-600"><i class="fas fa-dumbbell"></i> Workouts:</h3>
+                    <ul class="list-disc pl-5 text-sm text-purple-700" x-html="formatList(workouts)"></ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script> <!-- Link to JS file -->
+</body>
+</html>

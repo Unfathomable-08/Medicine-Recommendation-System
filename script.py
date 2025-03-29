@@ -93,21 +93,3 @@ print("Diets:", get_diets(disease))
 print("Medications:", get_medications(disease))
 print("Precautions:", get_precautions(disease))
 print("Workouts:", get_workouts(disease))
-
-
-
-
-
-
-
-
-
-
-# print(description_df.head())
-# print(diets_df.head())
-# print(medication_df.head())
-# print(precaution_df.head())
-# print(symptoms_df.head())
-# print(symptoms_severity_df.head())
-# print(training_df.head())
-# print(workout_df.head())
