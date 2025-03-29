@@ -57,9 +57,43 @@ def symptom_to_array(input):
 # Predicting from input
 
 user_vector = symptom_to_array(user_input)
-disease = pipeline.predict(user_vector.reshape(1, -1)) # It needed 2D array [[0, 0, 1, 0]]
 
-print(disease)
+user_df = pd.DataFrame([user_vector], columns=X.columns)  # Convert to DataFrame with same feature names else giving warning
+disease = pipeline.predict(user_df)[0]  # It needed 2D array [[0, 0, 1, 0]]
+
+# Get all other things too from disease
+
+def get_description(disease):
+    result = description_df[description_df["Disease"] == disease]["Description"]
+    return result.values[0] if not result.empty else "No description available."
+
+def get_diets(disease):
+    result = diets_df[diets_df["Disease"] == disease]["Diet"]
+    return eval(result.values[0]) if not result.empty else "No diet recommendations available."
+
+def get_medications(disease):
+    result = medication_df[medication_df["Disease"] == disease]["Medication"]
+    return eval(result.values[0]) if not result.empty else "No medications found."
+
+def get_workouts(disease):
+    result = workout_df[workout_df["disease"] == disease]["workout"]
+    return result.tolist() if not result.empty else "No workout recommendations available."
+
+def get_precautions(disease):
+    result = precaution_df[precaution_df["Disease"] == disease]
+    if not result.empty:
+        return result.iloc[:, 1:].values.flatten().tolist()  # Select all row and all col except 1 => df to 2d numpy array => flatten to 1D numpy array => to list (python array)
+    else:
+        return ["No precautions found"]
+
+# Example usage after predicting the disease:
+print("Disease:", disease)
+print("Description:", get_description(disease))
+print("Diets:", get_diets(disease))
+print("Medications:", get_medications(disease))
+print("Precautions:", get_precautions(disease))
+print("Workouts:", get_workouts(disease))
+
 
 
 
