@@ -15,12 +15,12 @@
 
     <div class="w-screen max-w-full p-8" x-data="symptomApp()" x-init="loadSymptoms()">
         <!-- Header -->
-        <h1 class="text-4xl font-bold text-center text-blue-700 mb-6 uppercase tracking-wide">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6 uppercase tracking-wide">
             <i class="fas fa-notes-medical"></i> Symptom Checker
         </h1>
 
         <!-- Search Box -->
-        <div class="relative max-w-lg mx-auto">
+        <div class="relative max-w-xl mx-auto">
             <input type="text" x-model="searchQuery" placeholder="Search symptoms..." 
                    class="w-full p-3 border-2 border-blue-500 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             <div class="absolute right-3 top-3 text-blue-500">
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Dropdown Symptom List -->
-        <ul class="mt-2 border border-blue-300 rounded-lg bg-white max-h-48 overflow-y-auto max-w-lg mx-auto" 
+        <ul class="mt-2 border border-blue-300 rounded-lg bg-white max-h-48 overflow-y-auto max-w-xl mx-auto" 
             x-show="filteredSymptoms.length">
             <template x-for="symptom in filteredSymptoms" :key="symptom">
                 <li class="p-2 hover:bg-blue-100 cursor-pointer flex items-center gap-2" 
@@ -56,16 +56,20 @@
         <!-- Button to Check Disease -->
         <div class="mt-6 text-center">
             <button @click="checkDisease()" 
-                    class="bg-green-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-green-700 transition text-lg font-semibold uppercase">
+                    class="bg-green-600 text-white px-8 py-2 rounded-lg shadow-md hover:bg-green-700 transition text-lg font-semibold uppercase">
                 <i class="fas fa-stethoscope"></i> Check Disease
             </button>
         </div>
 
         <!-- Results Section -->
         <div x-show="disease" class="mt-8 p-6 border-2 border-blue-500 rounded-lg shadow-lg bg-white max-w-4xl mx-auto" x-cloak>
-            <h2 class="text-2xl font-bold text-red-600 text-center">
+            <h2 class="text-xl md:text-2xl font-bold text-red-600 text-center">
                 <i class="fas fa-exclamation-circle"></i> Diagnosis: <span x-text="disease"></span>
             </h2>
+
+            <h4 class="md:text-lg font-bold text-blue-600 mt-2 text-center">
+                <i class="fas fa-file-medical-alt"></i> Description: <span x-text="description"></span>
+            </h4>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Diet -->

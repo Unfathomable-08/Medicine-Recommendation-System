@@ -9,6 +9,7 @@ function symptomApp() {
         medications: [],
         precautions: [],
         workouts: [],
+        description: [],
 
         async loadSymptoms() {
             try {
@@ -16,7 +17,12 @@ function symptomApp() {
                 const text = await response.text();
                 const rows = text.split('\n').map(row => row.split(','));
 
-                this.symptoms = [...new Set(rows.map(row => row[0]).filter(s => s))];
+                let symptoms = [...new Set(rows.map(row => row[0]).filter(s => s))]; // Remove duplicates and falsy values
+                symptoms.shift(); // Remove the first element "Symptoms"
+                symptoms.pop();   // Remove the last element "Prognosis"
+
+                this.symptoms = symptoms; // Store the processed array
+
             } catch (error) {
                 console.error('Error loading CSV:', error);
             }
@@ -58,14 +64,15 @@ function symptomApp() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                
+
                 const data = await response.json();
         
                 this.disease = data.disease || "No disease found";
                 this.diets = data.diets || [];
                 this.medications = data.medications || [];
-                this.precautions = data.precautions || [];
+                this.precautions = data.precautions.length ? data.precautions.slice(1) : [];
                 this.workouts = data.workouts || [];
+                this.description = data.description || [];
         
             } catch (error) {
                 console.error("Error checking disease:", error);
