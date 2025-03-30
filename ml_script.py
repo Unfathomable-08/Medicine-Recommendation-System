@@ -35,31 +35,25 @@ pipeline = Pipeline([
 
 pipeline.fit(X_train, y_train)
 
-# Make predictions
-
-y_pred = pipeline.predict(X_test)
-
 # Dynamic Predictions Function
 
-user_input = input("Enter your symptoms") # Talking input
+def symptom_to_array(symptoms):
+    symptoms_vector = np.zeros(len(X.columns))  # Array with all zeros
 
-def symptom_to_array(input):
-    user_symptoms = input.lower().split(",") # Spliting and converting to array
-    symptoms_vector = np.zeros(len(X.columns)) # Array with all zeros
-
-    for symptom in user_symptoms: # Loop through symptoms entered as input
-        symptom = symptom.strip() # remove extra spaces
-        if symptom in X.columns: # Loop through symptoms dataset
-            symptoms_vector[list(X.columns).index(symptom)] = 1 # Converting 0 to 1 where index matches with symtop
+    for symptom in symptoms:  # Loop through symptoms entered as input
+        symptom = symptom.strip().lower()  # Remove extra spaces and convert to lowercase
+        if symptom in X.columns:  # Check if symptom exists in dataset
+            symptoms_vector[X.columns.get_loc(symptom)] = 1  # Set corresponding index to 1
 
     return symptoms_vector
 
-# Predicting from input
+def get_disease(symptoms):
+    user_vector = symptom_to_array(symptoms)  # Convert symptoms to numerical array
+    user_df = pd.DataFrame([user_vector], columns=X.columns)  # Convert to DataFrame with same feature names
+    print(pipeline.predict(user_df)[0])
+    disease = pipeline.predict(user_df)[0]  # Predict disease
 
-user_vector = symptom_to_array(user_input)
-
-user_df = pd.DataFrame([user_vector], columns=X.columns)  # Convert to DataFrame with same feature names else giving warning
-disease = pipeline.predict(user_df)[0]  # It needed 2D array [[0, 0, 1, 0]]
+    return disease if disease else "Unable to predict disease"
 
 # Get all other things too from disease
 
@@ -85,11 +79,3 @@ def get_precautions(disease):
         return result.iloc[:, 1:].values.flatten().tolist()  # Select all row and all col except 1 => df to 2d numpy array => flatten to 1D numpy array => to list (python array)
     else:
         return ["No precautions found"]
-
-# Example usage after predicting the disease:
-print("Disease:", disease)
-print("Description:", get_description(disease))
-print("Diets:", get_diets(disease))
-print("Medications:", get_medications(disease))
-print("Precautions:", get_precautions(disease))
-print("Workouts:", get_workouts(disease))
