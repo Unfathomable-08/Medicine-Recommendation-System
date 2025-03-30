@@ -8,14 +8,16 @@ from sklearn.metrics import accuracy_score, classification_report
 
 # Load Datasets
 
-training_df = pd.read_csv("datasets/Training.csv")  # Contains symptoms & disease to predict
-description_df = pd.read_csv("datasets/description.csv")
-diets_df = pd.read_csv("datasets/diets.csv")
-medication_df = pd.read_csv("datasets/medications.csv")
-precaution_df = pd.read_csv("datasets/precautions_df.csv")
-symptoms_df = pd.read_csv("datasets/symtoms_df.csv")
-symptoms_severity_df = pd.read_csv("datasets/Symptom-severity.csv")
-workout_df = pd.read_csv("datasets/workout_df.csv")
+base_path = "/home/unfathomable06/Medicine-Recommendation-System/datasets/"
+
+training_df = pd.read_csv(base_path + "Training.csv")  # Contains symptoms & disease to predict
+description_df = pd.read_csv(base_path + "description.csv")
+diets_df = pd.read_csv(base_path + "diets.csv")
+medication_df = pd.read_csv(base_path + "medications.csv")
+precaution_df = pd.read_csv(base_path + "precautions_df.csv")
+symptoms_df = pd.read_csv(base_path + "symtoms_df.csv")
+symptoms_severity_df = pd.read_csv(base_path + "Symptom-severity.csv")
+workout_df = pd.read_csv(base_path + "workout_df.csv")
 
 # Split into test train datasets
 
